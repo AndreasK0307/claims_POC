@@ -72,7 +72,7 @@ export class AdjusterService {
     }
   }
 
-  // Function for adding an adjuster
+  // Function for adding an adjuster by their employee id
   public async addAdjusterByEmployeeId(employeeId: number) {
     try {
       const adjuster: Prisma.AdjusterCreateInput = {
@@ -86,12 +86,68 @@ export class AdjusterService {
       const createAdjuster = await prisma.adjuster.create({
         data: adjuster,
       });
+      const _updateEmployee = await this.updateRoleAdjuster(employeeId);
+
       return createAdjuster;
     } catch (error) {
       console.log(error);
     }
   }
 
+  // Function for adding an adjuster by their email
+  public async addAdjusterByEmail(email: string) {
+    try {
+      const employee = await prisma.employee.findFirst({
+        where: {
+          user: {
+            email,
+          },
+        },
+      });
+
+      if (!employee) {
+        throw new Error("Employee not found");
+      }
+
+      const adjuster: Prisma.AdjusterCreateInput = {
+        employee: {
+          connect: {
+            id: employee.id,
+          },
+        },
+      };
+
+      const createAdjuster = await prisma.adjuster.create({
+        data: adjuster,
+      });
+
+      const _updateEmployee = this.updateRoleAdjuster(employee.id);
+
+      return createAdjuster;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // Function for updating an adjuster
+  public async updateRoleAdjuster(employeeId: number) {
+    try {
+      const _updateEmployee = await prisma.user.update({
+        where: {
+          employee_id: employeeId,
+        },
+        data: {
+          role: {
+            connect: {
+              name: "ADJUSTER",
+            },
+          },
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   // Function for hard deleting an adjuster
   public async hardDeleteAdjuster(adjusterId: number) {

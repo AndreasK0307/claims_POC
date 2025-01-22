@@ -112,18 +112,6 @@ export class UserController {
     }
   }
 
-  // // Get payments by employee id
-  // public async getPaymentsByEmployeeId(req: Request, res: Response) {
-  //   const employeeId = parseInt(req.query.val);
-  //   try {
-  //     const payments = await paymentService.getPaymentsByEmployeeId(employeeId);
-  //     res.json(payments);
-  //   } catch (error) {
-  //     console.log(error);
-  //     res.status(500).send("Error getting payments");
-  //   }
-  // }
-
   // ----------------------------------------------------------------
   // Functions to get supporting data for claims
   // Get documents by claim id
