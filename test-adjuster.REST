@@ -1,0 +1,48 @@
+### Test login ###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "jane@example.com",
+    "password": "jane"
+}
+
+### Test access OTHER routes ###
+### Test GET user ###
+GET http://localhost:3000/user
+### Test GET admin ###
+GET http://localhost:3000/admin
+### Test GET adjuster ###
+GET http://localhost:3000/adjuster
+
+
+### Test access claims by adjuster user id ###
+GET http://localhost:3000/adjuster/claims
+
+### Test access claim items by claim id ###
+GET http://localhost:3000/adjuster/claims/1
+
+### Test detailed claim by claim id ###
+GET http://localhost:3000/adjuster/claims/1/details
+
+### Test review claim by claim id ###
+PUT http://localhost:3000/adjuster/claims/1/reviews
+Content-Type: application/json
+
+{
+    "status": "APPROVED",
+    "remarks": "Claim approved",
+    "reviewLevel": "APPROVED"
+}
+
+### Test get all payments for claim ###
+GET http://localhost:3000/adjuster/claims/1/payments
+
+### Test create payment for claim ###
+POST http://localhost:3000/adjuster/claims/1/payments
+Content-Type: application/json
+
+{
+    "amount": 100,
+    "method": "Bank Transfer"
+}

@@ -1,0 +1,70 @@
+### Test Login ###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "john@example.com",
+    "password": "john"
+}
+
+### TEST OTHER ROUTES ###
+### Test GET user ###
+GET http://localhost:3000/user
+### Test GET admin ###
+GET http://localhost:3000/admin
+### Test GET adjuster ###
+GET http://localhost:3000/adjuster
+
+### TEST USER ROUTES ###
+### Test POST create claim ###
+POST http://localhost:3000/user/claims
+Content-Type: application/json
+
+{
+    "description": "Medical claim",
+    "employeeIds": [3],
+    "claimItems": [
+        {
+            "name": "Eye surgery",
+            "description": "Eye surgery fees",
+            "amount": 100
+        },
+        {
+            "name": "Medicine",
+            "description": "Medicine fees",
+            "amount": 80
+        }
+    ],
+    "documents": [
+        {
+            "title": "Medical cert",
+            "description": "Medical cert for eye surgery",
+            "url": "http://test/medical_cert.pdf",
+            "document_type": "pdf"
+        },
+        {
+            "title": "Medical receipt",
+            "description": "Medical receipt for surgery",
+            "url": "http://test/medicalReceipt.pdf",
+            "document_type": "pdf"
+        }
+    ]
+}
+
+### Test GET all claims ###
+GET http://localhost:3000/user/claims
+
+### Test GET documents by claim id ###
+GET http://localhost:3000/user/claims/2/documents
+
+### Test GET claim items by id ###
+GET http://localhost:3000/user/claims/2/items
+
+### Test PUT edit claim ###
+PUT http://localhost:3000/user/claims/2
+Content-Type: application/json
+
+{
+    "description": "Test"
+}
+

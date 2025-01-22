@@ -1,0 +1,11 @@
+{
+  "nodeModulesDir": "auto",
+  "tasks": {
+    "PrismaInit": "deno run --allow-read --allow-env --allow-write npm:prisma@latest init",
+    "pushDB": "deno run -A npm:prisma@latest db push --force-reset",
+    "generate": "deno run -A --unstable npm:prisma@latest generate --no-engine",
+    "seed": "deno run -A prisma/seed.ts",
+    "dev": "deno run -A --watch ./src/main.ts",
+    "format": "deno run -A npm:prisma format"
+  }
+}

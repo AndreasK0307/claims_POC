@@ -1,0 +1,51 @@
+### TEST ADMIN ROUTES ###
+### Test login ###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "admin@example.com",
+    "password": "admin"
+}
+
+### Test access OTHER routes ###
+### Test GET user ###
+GET http://localhost:3000/user
+### Test GET admin ###
+GET http://localhost:3000/admin
+### Test GET adjuster ###
+GET http://localhost:3000/adjuster
+
+
+### Test create register user ###
+POST http://localhost:3000/admin/register
+Content-Type: application/json
+
+{
+    "email": "adam@example.com",
+    "password": "password",
+    "roleName": "USER",
+    "firstName": "Adam",
+    "lastName": "Carter",
+    "department": "NETWORK",
+    "employmentType": "FULLTIME",
+    "position": "NETWORK ENGINEER"
+}    
+
+### Test get all users ###
+GET http://localhost:3000/admin/users
+
+### Test get all employees ###
+GET http://localhost:3000/admin/employees
+
+### Test get all adjusters ###
+GET http://localhost:3000/admin/adjusters
+
+### Test get all claims ###
+GET http://localhost:3000/admin/claims
+
+### Test get all claim items ###
+GET http://localhost:3000/admin/claimItems
+
+### Test get all documents ###
+GET http://localhost:3000/admin/documents

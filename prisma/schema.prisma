@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["deno"]
+  output          = "../generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  password    String
+  deleted     Boolean?  @default(false)
+  employee    Employee?
+  employee_id Int?      @unique
+  role        Role      @relation(fields: [role_id], references: [id])
+  role_id     Int
+}
+
+model Employee {
+  id              Int            @id @default(autoincrement())
+  first_name      String
+  last_name       String
+  department      String
+  employment_type EmploymentType
+  position        String
+  deleted         Boolean?       @default(false)
+  claims          Claim[]
+  Adjuster        Adjuster?
+  user            User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id         Int            @unique
+}
+
+model Adjuster {
+  id          Int      @id @default(autoincrement())
+  employee    Employee @relation(fields: [employee_id], references: [id])
+  employee_id Int      @unique
+  claims      Claim[]
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String
+  deleted     Boolean? @default(false)
+  user        User[]
+}
+
+model Document {
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String
+  upload_date   DateTime @default(now())
+  url           String
+  document_type String
+  deleted       Boolean? @default(false)
+  claim         Claim?   @relation(fields: [claim_id], references: [id], onDelete: Cascade)
+  claim_id      Int
+}
+
+model ClaimItem {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  amount      Float
+  deleted     Boolean? @default(false)
+  claim       Claim?   @relation(fields: [claim_id], references: [id], onDelete: Cascade)
+  claim_id    Int
+}
+
+model Payment {
+  id       Int      @id @default(autoincrement())
+  amount   Float
+  date     DateTime @default(now())
+  method   String
+  deleted  Boolean? @default(false)
+  claim    Claim?   @relation(fields: [claim_id], references: [id])
+  claim_id Int
+}
+
+model Claim {
+  id             Int         @id @default(autoincrement())
+  date_submitted DateTime    @default(now())
+  date_updated   DateTime    @default(now()) @updatedAt
+  description    String
+  status         Status      @default(OPEN)
+  remarks        String?
+  adjuster       Adjuster[]
+  deleted        Boolean?    @default(false)
+  review_level   ReviewLevel @default(UNASSIGNED)
+  claim_items    ClaimItem[]
+  employees      Employee[]
+  payments       Payment[]
+  documents      Document[]
+}
+
+enum EmploymentType {
+  FULLTIME
+  PARTTIME
+  CONTRACT
+  INTERN
+}
+
+enum Status {
+  OPEN
+  PENDING
+  APPROVED
+  DENIED
+  PAID
+}
+
+enum ReviewLevel {
+  UNASSIGNED
+  LEVEL1
+  LEVEL2
+  LEVEL3
+  APPROVED
+}
